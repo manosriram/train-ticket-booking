@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <div class="container">
+        <h3>Revenue of Train in a time-frame</h3>
+        <form action="/train/revenue" method="POST">
+        <select id="train_no" name="train_no">
+            <option value="98719">98719</option>
+            <option value="11111">11111</option>
+            <option value="16701">16701</option>
+            <option value="33212">33212</option>
+            <option value="98429">98429</option>
+            <option value="20120">20120</option>
+            <option value="12341">12341</option>
+        </select>
+        <br />
+        <br />
+        <input required id="from" type="text" name="from" placeholder="From (yyyy-mm-dd)" />
+        <br />
+        <br />
+        <input required id="to" type="text" name="to" placeholder="To (yyyy-mm-dd)" />
+        <br />
+        <br />
+        <input type="submit" value="Get Revenue">
+        </form>
+    <% if (revenue) { %>
+        <hr>
+            <h2><strong>Revenue</strong>: <%= revenue %></h2>
+    <% } %>
+            </div>
+    </div>
+</body>
+</html>

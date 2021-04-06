@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <div class="container">
+    <h3>Arrivals</h3>
+    <form action="/train/arrivals" method="POST">
+        <label for="">Arrival Station: </label>
+        <select id="station" name="station">
+            <option value="ANY">ANY</option>
+            <option value="MTN">Mumbai</option>
+            <option value="MAS">Chennai</option>
+            <option value="VSKP">Visakhapatnam</option>
+            <option value="SBC">Banglore</option>
+            <option value="MYS">Mysore Junction</option>
+        </select>
+        <br />
+        <br />
+        <input required id="from" type="text" name="from" placeholder="From (Eg: 21:00:00)" />
+        <br />
+        <br />
+        <input required id="to" type="text" name="to" placeholder="To (Eg: 21:00:00)" />
+        <br />
+        <br />
+        <input type="submit" value="Show arrivals">
+    </form>
+    <hr>
+    <div class="container">
+    <% if (arrivals) { %>
+        <h4 class="alert alert-primary">Trains arriving between <%= arrivals.arrival %> and <%= arrivals.departure %></h4>
+        <% for (let t=0;t<arrivals.length;++t) { %>
+                <p><strong>Train No</strong>: <%= arrivals[t].train_no %></p>
+                <p><strong>Stop</strong>: <%= arrivals[t].stop %></p>
+                <p><strong>Arrival</strong>: <%= arrivals[t].arrival %></p>
+                <p><strong>Departure</strong>: <%= arrivals[t].departure %></p>
+                <p><strong>Day of week</strong>: <%= arrivals[t].day %></p>
+            <hr>
+        <% } %>
+    <% } %>
+            </div>
+    </div>
+</body>
+</html>

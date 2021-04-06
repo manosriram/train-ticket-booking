@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title></title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Train Ticket Booking</a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <% if (!user) { %>
+                <li>
+                    <a href="/register"
+                        ><span class="glyphicon glyphicon-user"></span>Register</a
+                    >
+                </li>
+                <li>
+                    <a href="/login"
+                        ><span class="glyphicon glyphicon-log-in"></span>
+                        Login</a
+                    >
+                </li>
+                <% } if (user) { %>
+                <li>
+                    <a href="/auth/logout"
+                        ><span class="glyphicon glyphicon-log-in"></span>
+                        Logout</a
+                    >
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

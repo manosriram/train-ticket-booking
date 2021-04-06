@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+<div class="container">
+    <h3>Book Ticket</h3>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <p>Each Ticket: 250/-</p>
+    <form action="/user/book" method="POST">
+        <label for="">Train Number: </label>
+        <select id="train_no" name="trainNo">
+            <option value="98719">98719</option>
+            <option value="11111">11111</option>
+            <option value="16701">16701</option>
+            <option value="33212">33212</option>
+            <option value="98429">98429</option>
+            <option value="20120">20120</option>
+            <option value="12341">12341</option>
+        </select>
+        <br />
+        <input required id="ticketCount" type="number" name="ticketCount" placeholder="Number of tickets" />
+        <input required id="doj" type="date" name="doj" placeholder="Date of Journey" />
+        <input type="submit" value="Book">
+    </form>
+</div>
+</body>
+</html>

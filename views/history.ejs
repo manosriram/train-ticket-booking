@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <h3 class="container"><i>User Booking History</i></h3>
+    <hr>
+    
+    <% if (history) { %>
+        <% for (let t=0;t<history.length;++t) { %>
+            <div class="container" id="ticket">
+                <p><strong>Ticket ID</strong>: <%= history[t].id %></p>
+                <p><strong>Train Number</strong>: <%= history[t].train_no %></p>
+                <p><strong>Seats</strong>: <%= history[t].seats %></p>
+                <p><strong>Booked on</strong>: <%= history[t].created_at %></p>
+                <p><strong>Date of Journey</strong>: <%= history[t].doj %></p>
+            </div>
+            <hr />
+        <% } %>
+    <% } %>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <div class="container">
+    <h3>Search trains b/w stations</h3>
+    <label for="">From</label>
+
+    <form action="/train/list">
+    <select id="from" name="from">
+        <option value="MTN">Mumbai</option>
+        <option value="MAS">Chennai</option>
+        <option value="VSKP">Visakhapatnam</option>
+        <option value="SBC">Banglore</option>
+        <option value="MYS">Mysore Junction</option>
+    </select>
+    <select id="to" name="to">
+        <option value="MTN">Mumbai</option>
+        <option value="MAS">Chennai</option>
+        <option value="VSKP">Visakhapatnam</option>
+        <option value="SBC">Banglore</option>
+        <option value="MYS">Mysore Junction</option>
+    </select>
+    <select id="day" name="day">
+        <option value="sunday">Sunday</option>
+        <option value="monday">Monday</option>
+        <option value="tuesday">Tuesday</option>
+        <option value="wednesday">Wednesday</option>
+        <option value="thursday">Thursday</option>
+        <option value="friday">Friday</option>
+        <option value="saturday">Saturday</option>
+    </select>
+    <input type="submit" value="Search">
+</form>
+<% if (trains && trains.length === 0) { %>
+    <h4>Empty List.</h4>
+<% } %>
+<% if (trains && trains.length > 0) { %>
+    <hr>
+    <% for (let t=0;t<trains.length;++t) { %>
+    <p><strong>Train No</strong>: <%=trains[t].train_no%></p>
+    <p><strong>From</strong>: <%=trains[t].src%></p>
+    <p><strong>To</strong>: <%=trains[t].dest%></p>
+    <p><strong>Day</strong>: <%=trains[t].day%></p>
+    <p><strong>Status</strong>: <%=trains[t].status%></p>
+    <%  } } %>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <div class="container">
+    <h3>Login page</h3>
+    <form action="/auth/login" method="POST">
+        <input id="email" type="email" name="email" placeholder="Email Address" />
+        <br />
+        <br />
+        <input id="password" type="password" name="password" placeholder="Password" />
+        <br />
+        <br />
+        <input type="submit" value="Login">
+    </form>
+    </div>
+</body>
+</html>

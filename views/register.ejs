@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register page</title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+
+        <div class="container">
+    <h3>Register page</h3>
+    <form action="/auth/signup" method="POST">
+        <input id="email" type="email" name="email" placeholder="Email Address" />
+        <br />
+        <br />
+        <input id="first_name" type="text" name="first_name" placeholder="First Name" />
+        <br />
+        <br />
+        <input id="last_name" type="text" name="last_name" placeholder="Last Name" />
+        <br />
+        <br />
+        <input id="password" type="password" name="password" placeholder="Password" />
+        <br />
+        <br />
+        <input type="submit" value="Register">
+    </form>
+        </div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="container">
+    <% if (message) { %>
+        <h4 class="alert alert-success"><%=message%></h4>
+    <% } %>
+    <% if (error) { %>
+        <h4 class="alert alert-danger"><%=error%></h4>
+    <% } %>
+    <h3>List all stops of a train.</h3>
+    <hr>
+    
+    <form action="/train/stops" method="POST">
+        <label for="">Train Number: </label>
+        <select id="train_no" name="train_no">
+            <option value="98719">98719</option>
+            <option value="11111">11111</option>
+            <option value="16701">16701</option>
+            <option value="33212">33212</option>
+            <option value="98429">98429</option>
+            <option value="20120">20120</option>
+            <option value="12341">12341</option>
+        </select>
+        <br>
+        <input type="submit" value="List all stops">
+    </form>
+    </div>
+<% if (trains && trains.length === 0) { %>
+    <h4>Empty List.</h4>
+<% } %>
+<% if (trains && trains.length > 0) { %>
+<div class="container">
+    <h1>Train No: <%= trains.train_no %></h1>
+</div>
+    <hr>
+    <% for (let t=0;t<trains.length;++t) { %>
+    <div class="container">
+    <p><strong>Stop</strong>: <%=trains[t].stop%></p>
+    <p><strong>Arrival</strong>: <%=trains[t].arrival%></p>
+    <p><strong>Departure</strong>: <%=trains[t].departure%></p>
+    </div>
+    <hr>
+    <%  } } %>
+</body>
+</html>
