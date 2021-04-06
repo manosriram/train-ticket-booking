@@ -8,3 +8,7 @@
   a. PostgreSQL dump: File name "psql_dump". You can use this file by ```psql manosriram < psql_dump```<br/><br/>
   b. Redis dump: File name "dump.rdb". Just save this file to your default redis-dump location. (which can be seen with the command ```config get dir```
      in redis-cli).<br/><br/>
+
+### Database Design
+
+![db-design](https://ik.imagekit.io/09vbfltqtgx/railway-db-design_TCDiCpWN0b.png)
