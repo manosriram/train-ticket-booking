@@ -1,0 +1,441 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.1
+-- Dumped by pg_dump version 13.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: railuser; Type: TABLE; Schema: public; Owner: manosriram
+--
+
+CREATE TABLE public.railuser (
+    id integer NOT NULL,
+    first_name character varying(32),
+    last_name character varying(32),
+    email character varying(32),
+    password character varying(64)
+);
+
+
+ALTER TABLE public.railuser OWNER TO manosriram;
+
+--
+-- Name: railuser_id_seq; Type: SEQUENCE; Schema: public; Owner: manosriram
+--
+
+CREATE SEQUENCE public.railuser_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.railuser_id_seq OWNER TO manosriram;
+
+--
+-- Name: railuser_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: manosriram
+--
+
+ALTER SEQUENCE public.railuser_id_seq OWNED BY public.railuser.id;
+
+
+--
+-- Name: seat; Type: TABLE; Schema: public; Owner: manosriram
+--
+
+CREATE TABLE public.seat (
+    train_no integer NOT NULL,
+    seat_id integer NOT NULL,
+    is_booked boolean DEFAULT false
+);
+
+
+ALTER TABLE public.seat OWNER TO manosriram;
+
+--
+-- Name: stop; Type: TABLE; Schema: public; Owner: manosriram
+--
+
+CREATE TABLE public.stop (
+    train_no integer NOT NULL,
+    stop character varying(32) NOT NULL,
+    arrival time without time zone,
+    departure time without time zone,
+    day character varying(32)
+);
+
+
+ALTER TABLE public.stop OWNER TO manosriram;
+
+--
+-- Name: ticket; Type: TABLE; Schema: public; Owner: manosriram
+--
+
+CREATE TABLE public.ticket (
+    id integer NOT NULL,
+    user_id integer,
+    train_no integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    seats integer,
+    doj date
+);
+
+
+ALTER TABLE public.ticket OWNER TO manosriram;
+
+--
+-- Name: ticket_id_seq; Type: SEQUENCE; Schema: public; Owner: manosriram
+--
+
+CREATE SEQUENCE public.ticket_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ticket_id_seq OWNER TO manosriram;
+
+--
+-- Name: ticket_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: manosriram
+--
+
+ALTER SEQUENCE public.ticket_id_seq OWNED BY public.ticket.id;
+
+
+--
+-- Name: trains; Type: TABLE; Schema: public; Owner: manosriram
+--
+
+CREATE TABLE public.trains (
+    train_no integer NOT NULL,
+    src character varying(32),
+    dest character varying(32),
+    day character varying(12)
+);
+
+
+ALTER TABLE public.trains OWNER TO manosriram;
+
+--
+-- Name: railuser id; Type: DEFAULT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.railuser ALTER COLUMN id SET DEFAULT nextval('public.railuser_id_seq'::regclass);
+
+
+--
+-- Name: ticket id; Type: DEFAULT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.ticket ALTER COLUMN id SET DEFAULT nextval('public.ticket_id_seq'::regclass);
+
+
+--
+-- Data for Name: railuser; Type: TABLE DATA; Schema: public; Owner: manosriram
+--
+
+COPY public.railuser (id, first_name, last_name, email, password) FROM stdin;
+1	mano	sriram	mano@mail.com	$2a$10$T3bwTDHDMsrfer3hvHCr9.Eq/BVZSHHOeleRnI0pYd7TS8jTaIhxK
+2	\N	\N	mano124@mail.com	$2a$10$OyAGv3AtPvr2isajbBhW0u3//cZIuyoorSfvDrHgDgCrOZTvpfv2y
+3	\N	\N	mano123@mail.com	$2a$10$KW1lvZd.5AvaiQirtinGbOcVDxxsIOUPDbnBPCLhvxo1eszIwxFGW
+\.
+
+
+--
+-- Data for Name: seat; Type: TABLE DATA; Schema: public; Owner: manosriram
+--
+
+COPY public.seat (train_no, seat_id, is_booked) FROM stdin;
+33212	2	f
+98429	2	f
+12341	2	f
+98719	3	f
+16701	1	f
+11111	1	f
+11111	3	f
+16701	3	f
+33212	1	f
+33212	3	f
+98429	3	f
+98429	1	f
+12341	3	f
+98719	4	f
+11111	4	f
+16701	4	f
+12341	1	f
+33212	4	f
+98429	4	f
+12341	4	f
+98719	5	f
+11111	5	f
+16701	5	f
+98429	5	f
+33212	5	f
+98719	6	f
+12341	5	f
+11111	6	f
+11111	2	f
+16701	6	f
+33212	6	f
+98429	6	f
+12341	6	f
+98719	7	f
+11111	7	f
+16701	2	f
+16701	7	f
+33212	7	f
+98429	7	f
+20120	7	f
+12341	7	f
+98719	8	f
+11111	8	f
+16701	8	f
+33212	8	f
+98429	8	f
+20120	8	f
+12341	8	f
+98719	9	f
+16701	9	f
+11111	9	f
+33212	9	f
+20120	9	f
+98429	9	f
+12341	9	f
+98719	10	f
+11111	10	f
+16701	10	f
+33212	10	f
+98429	10	f
+20120	10	f
+12341	10	f
+98719	11	f
+11111	11	f
+16701	11	f
+98429	11	f
+33212	11	f
+12341	11	f
+20120	11	f
+98719	12	f
+11111	12	f
+16701	12	f
+33212	12	f
+98429	12	f
+20120	12	f
+12341	12	f
+98719	13	f
+11111	13	f
+16701	13	f
+33212	13	f
+98429	13	f
+20120	13	f
+12341	13	f
+98719	14	f
+11111	14	f
+16701	14	f
+33212	14	f
+98429	14	f
+98429	15	f
+20120	14	f
+98719	15	f
+12341	14	f
+12341	15	f
+11111	15	f
+16701	15	f
+33212	15	f
+20120	15	f
+11111	16	f
+98719	16	f
+33212	16	f
+98429	16	f
+16701	16	f
+20120	16	f
+12341	16	f
+98719	17	f
+11111	17	f
+16701	17	f
+33212	17	f
+98429	17	f
+20120	17	f
+12341	17	f
+98719	18	f
+16701	18	f
+11111	18	f
+33212	18	f
+98429	18	f
+20120	18	f
+12341	18	f
+11111	19	f
+98719	19	f
+16701	19	f
+33212	19	f
+98429	19	f
+20120	19	f
+12341	19	f
+20120	1	t
+20120	2	t
+20120	3	t
+20120	4	t
+20120	5	t
+20120	6	t
+98719	1	t
+98719	2	t
+\.
+
+
+--
+-- Data for Name: stop; Type: TABLE DATA; Schema: public; Owner: manosriram
+--
+
+COPY public.stop (train_no, stop, arrival, departure, day) FROM stdin;
+16701	MRJ	11:00:00	12:00:00	monday
+16701	UBL	13:00:00	13:30:00	monday
+16701	ADI	07:00:00	07:30:00	monday
+20120	VSKP	11:00:00	11:30:00	saturday
+20120	UBL	04:00:00	04:30:00	saturday
+20120	MAS	06:00:00	06:30:00	saturday
+98719	AKP	13:00:00	13:10:00	wednesday
+98719	VSKP	20:00:00	20:30:00	wednesday
+98719	HWH	01:00:00	01:45:00	wednesday
+33212	MAS	14:10:00	14:30:00	thursday
+98429	UBL	06:00:00	06:10:00	friday
+98429	HYB	01:00:00	01:30:00	friday
+98429	VSKP	11:00:00	12:30:00	friday
+98429	MAS	21:00:00	21:45:00	friday
+12341	MAS	23:00:00	00:30:00	tuesday
+12341	RJY	15:00:00	15:15:00	tuesday
+\.
+
+
+--
+-- Data for Name: ticket; Type: TABLE DATA; Schema: public; Owner: manosriram
+--
+
+COPY public.ticket (id, user_id, train_no, created_at, seats, doj) FROM stdin;
+1	1	20120	2021-04-06 21:52:09.075164	1	\N
+2	1	20120	2021-04-06 21:53:54.382945	1	\N
+3	1	20120	2021-04-06 23:11:06.910081	1	\N
+4	1	20120	2021-04-06 23:11:24.587068	1	\N
+5	1	20120	2021-04-06 23:48:36.980484	1	2021-04-07
+6	1	98719	2021-04-06 23:57:13.980097	1	2021-04-08
+7	1	98719	2021-04-07 01:19:01.338008	1	2021-04-13
+\.
+
+
+--
+-- Data for Name: trains; Type: TABLE DATA; Schema: public; Owner: manosriram
+--
+
+COPY public.trains (train_no, src, dest, day) FROM stdin;
+98719	MTN	MAS	wednesday
+11111	MAS	VSKP	sunday
+16701	SBC	MTN	monday
+33212	MYS	VSKP	thursday
+98429	MTN	MYS	friday
+20120	MAS	MYS	saturday
+12341	VSKP	SBC	tuesday
+\.
+
+
+--
+-- Name: railuser_id_seq; Type: SEQUENCE SET; Schema: public; Owner: manosriram
+--
+
+SELECT pg_catalog.setval('public.railuser_id_seq', 3, true);
+
+
+--
+-- Name: ticket_id_seq; Type: SEQUENCE SET; Schema: public; Owner: manosriram
+--
+
+SELECT pg_catalog.setval('public.ticket_id_seq', 7, true);
+
+
+--
+-- Name: railuser railuser_pkey; Type: CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.railuser
+    ADD CONSTRAINT railuser_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: seat seat_pkey; Type: CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.seat
+    ADD CONSTRAINT seat_pkey PRIMARY KEY (train_no, seat_id);
+
+
+--
+-- Name: stop stop_pkey; Type: CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.stop
+    ADD CONSTRAINT stop_pkey PRIMARY KEY (train_no, stop);
+
+
+--
+-- Name: ticket ticket_pkey; Type: CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT ticket_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trains trains_pkey; Type: CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.trains
+    ADD CONSTRAINT trains_pkey PRIMARY KEY (train_no);
+
+
+--
+-- Name: stop stop_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.stop
+    ADD CONSTRAINT stop_train_no_fkey FOREIGN KEY (train_no) REFERENCES public.trains(train_no);
+
+
+--
+-- Name: ticket ticket_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT ticket_train_no_fkey FOREIGN KEY (train_no) REFERENCES public.trains(train_no);
+
+
+--
+-- Name: ticket ticket_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: manosriram
+--
+
+ALTER TABLE ONLY public.ticket
+    ADD CONSTRAINT ticket_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.railuser(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

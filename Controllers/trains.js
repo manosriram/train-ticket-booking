@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+/* Gives the status, last_known_station of the train.
+ * GETs from Redis storage.
+ */
 router.post("/status", async (req, res) => {
     const { train_no } = req.body;
     const { aget } = req;
@@ -14,10 +17,12 @@ router.post("/status", async (req, res) => {
     });
 });
 
+// Gives the revenue of the train between 2 dates.
 router.post("/revenue", (req, res) => {
     const { train_no, from, to } = req.body;
     const { pool } = req;
 
+    // Select number of tickets related to this train_no and multiply the count by 250.
     pool.query(
         "select count(id) from ticket where train_no = $1 and created_at >= $2 and created_at <= $3",
         [train_no, from, to],
@@ -41,10 +46,12 @@ router.post("/revenue", (req, res) => {
     );
 });
 
+// Lists the arrivals of trains between a time period.
 router.post("/arrivals", (req, res) => {
     let { from, to, station } = req.body;
     const { pool } = req;
 
+    // If "ANY" is selected, list all arrivals, else filter arrivals by stop name.
     let qry = "",
         qryArr;
     if (station === "ANY") {
@@ -58,17 +65,27 @@ router.post("/arrivals", (req, res) => {
     }
 
     pool.query(qry, qryArr, (err, rows) => {
-        rows.rows.arrival = from;
-        rows.rows.departure = to;
-        return res.render("arrivals", {
-            message: null,
-            error: err,
-            arrivals: rows.rows,
-            user: true
-        });
+        if (!err) {
+            rows.rows.arrival = from;
+            rows.rows.departure = to;
+            return res.render("arrivals", {
+                message: null,
+                error: null,
+                arrivals: rows.rows,
+                user: true
+            });
+        } else {
+            return res.render("arrivals", {
+                message: null,
+                error: err,
+                arrivals: null,
+                user: true
+            });
+        }
     });
 });
 
+// Lists all the stops of the train, given train_no.
 router.post("/stops", (req, res) => {
     const { train_no } = req.body;
     const { pool } = req;
@@ -90,6 +107,7 @@ router.post("/stops", (req, res) => {
     );
 });
 
+// Searches and lists trains between a given a city and another city.
 router.get("/list", (req, res) => {
     const { from, to, day } = req.query;
     const { pool } = req;
@@ -107,21 +125,5 @@ router.get("/list", (req, res) => {
         }
     );
 });
-
-// router.get("/populate", async (req, res) => {
-// const { pool } = req;
-
-// pool.query("select * from trains", (err, rows) => {
-// for (let t = 1; t < 20; ++t) {
-// rows.rows.map(train => {
-// pool.query(
-// "insert into seat values($1, $2)",
-// [train.train_no, t],
-// (err, resp) => {}
-// );
-// });
-// }
-// });
-// });
 
 module.exports = router;

@@ -3,6 +3,9 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+/* Login route for user to persist a session.
+ * JWTs are used to create tokens, which inturn will be stored in the browser cookies.
+ */
 router.post("/login", async (req, res) => {
     const { pool } = req;
     const { email, password } = req.body;
@@ -11,6 +14,14 @@ router.post("/login", async (req, res) => {
         "select id, password from railuser where email = $1",
         [email],
         (err, rows) => {
+            if (err) {
+                return res.render("login", {
+                    message: null,
+                    error: err,
+                    user: null
+                });
+            }
+            // Check if the user exists.
             if (rows.rows.length === 0) {
                 return res.render("login", {
                     message: null,
@@ -18,10 +29,12 @@ router.post("/login", async (req, res) => {
                     user: null
                 });
             } else {
+                // Create a payload which will be stored in the token.
                 const payload = {
                     email,
                     id: rows.rows[0].id
                 };
+                // Check if the hashed password(in DB) and the given password matches.
                 const passwordMatch = bcrypt.compareSync(
                     password,
                     rows.rows[0].password
@@ -33,7 +46,8 @@ router.post("/login", async (req, res) => {
                         user: null
                     });
                 else {
-                    jwt.sign(payload, process.env.SECRET, (err, token) => {
+                    // Sign a token, if all goes well and create a cookie with that token value.
+                    jwt.sign(payload, "secret", (err, token) => {
                         if (err) console.error(err);
                         else {
                             res.cookie("jwt", token);
@@ -46,10 +60,14 @@ router.post("/login", async (req, res) => {
     );
 });
 
+/* Registers a user to DB.
+ * Password is hashed for enhanced security.
+ */
 router.post("/signup", async (req, res) => {
     const { pool } = req;
     const { email, firstName, lastName, password } = req.body;
 
+    // If user already exists, we should not allow the user to create another user with same details.
     pool.query(
         "select id from railuser where email = $1",
         [email],
@@ -61,6 +79,7 @@ router.post("/signup", async (req, res) => {
                     user: null
                 });
             else {
+                // Create a hash and use the salt to randomize the hash.
                 var salt = bcrypt.genSaltSync(10);
                 var hash = bcrypt.hashSync(password, salt);
                 pool.query(
@@ -79,6 +98,7 @@ router.post("/signup", async (req, res) => {
     );
 });
 
+// Logout the user by just clearing the cookie.
 router.get("/logout", (req, res) => {
     res.clearCookie("jwt");
     res.redirect("/");

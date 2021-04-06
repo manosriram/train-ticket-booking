@@ -7,14 +7,16 @@ const { Pool } = require("pg");
 const jwt = require("jsonwebtoken");
 const redis = require("redis");
 const client = redis.createClient();
-require("dotenv").config();
 
+// Promisify redis get and set functions so that we can use "await" on it.
 const { promisify } = require("util");
 const aget = promisify(client.get).bind(client);
 const aset = promisify(client.set).bind(client);
 
+// PSQL pool
 const pool = new Pool();
 
+// Middleware, variable to be used in other routes.
 app.use((req, res, next) => {
     req.pool = pool;
     req.aset = aset;
@@ -22,12 +24,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// Middlewares/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/views"));
 app.use(morgan("dev"));
 
+// Middleware which checks if the user is logged in or not.
+// Get the token from cookie and verify it using "jwt" module.
 function checkUser(req, res, next) {
     req.user = null;
     if (!req.headers.cookie) {
@@ -54,6 +59,7 @@ app.get("/", checkUser, (req, res) => {
     else res.render("index", { user: null });
 });
 
+// Use routes
 app.use("/user", require("./Controllers/user_trains"));
 app.use("/auth", require("./Controllers/auth"));
 app.use("/train", require("./Controllers/trains"));

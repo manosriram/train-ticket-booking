@@ -2,6 +2,10 @@ const express = require("express");
 const router = express();
 const isUser = require("../isUser");
 
+/* All the routes here, renders the EJS (template) file.
+ * It takes a parameter, which is a data object taken to the EJS file.
+ */
+
 router.get("/status", isUser, (req, res) => {
     res.render("status", {
         message: null,

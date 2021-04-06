@@ -2,6 +2,7 @@ const express = require("express");
 const router = express();
 const isUser = require("../isUser");
 
+// Gets a list of all bookings made by the user.
 router.get("/history", isUser, async (req, res) => {
     try {
         const { pool } = req;
@@ -10,6 +11,7 @@ router.get("/history", isUser, async (req, res) => {
             "select * from ticket where user_id = $1",
             [req.user.id]
         );
+        // Convert DB timestamp to human readable date.
         userTickets.rows = userTickets.rows.map(ticket => {
             ticket.created_at = new Date(ticket.created_at).toLocaleString();
             ticket.doj = new Date(ticket.doj).toDateString();
@@ -26,6 +28,11 @@ router.get("/history", isUser, async (req, res) => {
     }
 });
 
+/* Seat(s) are booked, after automatically picking the top 'x' non-booked seats.
+ *
+ * Transaction is done to avoid double-booking possibility.
+ *
+ */
 router.post("/book", isUser, async (req, res) => {
     const { pool } = req;
     try {
@@ -39,8 +46,10 @@ router.post("/book", isUser, async (req, res) => {
                 error: "Invalid date"
             });
         }
+        // Start a transaction.
         await pool.query("BEGIN");
 
+        // Check ticket-count: maximum 5 at once.
         if (ticketCount > 5) {
             return res.render("book", {
                 message: null,
@@ -49,8 +58,10 @@ router.post("/book", isUser, async (req, res) => {
                 error: "Max 5 tickets at once"
             });
         }
-        console.log(trainNo);
 
+        /* Select top non-booked seats from the seat table.
+         * row-level lock is obtained for these rows to prevent updates from another user.
+         */
         pool.query(
             "select seat_id from seat where train_no = $1 and is_booked = 'f' order by seat_id fetch first $2 rows only for update",
             [trainNo, ticketCount],
@@ -63,6 +74,7 @@ router.post("/book", isUser, async (req, res) => {
                         user: true
                     });
                 }
+                // If available seats are less than needed.
                 if (rows.rows.length < ticketCount)
                     return res.render("book", {
                         message: null,
@@ -70,17 +82,19 @@ router.post("/book", isUser, async (req, res) => {
                         trains: null,
                         user: true
                     });
+                // For every seat, create a ticket with respective values.
                 for (let t = 0; t < ticketCount; ++t) {
                     if (rows.rows[t]) {
                         const newTicket = await pool.query(
                             "insert into ticket(user_id, train_no, seats, doj) values($1, $2, $3, $4)",
                             [req.user.id, trainNo, ticketCount, doj]
                         );
-                        console.log(newTicket);
+                        // At the same time, update the status of the seat to 'booked'.
                         const bookedSeats = await pool.query(
                             "update seat set is_booked = 't' where train_no=$1 and seat_id=$2",
                             [trainNo, rows.rows[t].seat_id]
                         );
+                        // Commit the changes, and release the lock.
                         await pool.query("COMMIT");
                     }
                 }
