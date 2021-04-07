@@ -5,8 +5,8 @@
   b. Redis: Persistent storage to get and set frequent values.<br/>
 
 2. Populate DB: There are 2 dump files in this repo, PostgreSQL dump and redis-dump.<br/>
-  a. PostgreSQL dump: File name "psql_dump". You can use this file by ```psql manosriram < psql_dump```<br/>
-  b. Redis dump: File name "dump.rdb". Just save this file to your default redis-dump location. (which can be seen with the command ```config get dir```
+  a. PostgreSQL dump: File named "psql_dump". You can use this file by ```psql manosriram < psql_dump```<br/>
+  b. Redis dump: File named "dump.rdb". Just save this file to your default redis-dump location. (which can be seen with the command ```config get dir```
      in redis-cli).<br/>
 
 ### Database Design
